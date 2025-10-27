@@ -1,0 +1,100 @@
+<div class="profile-container" *ngIf="user">
+    <header class="breadcrumb">
+      <!-- <a href="callapi" class="link">Mainpage</a>
+      <span class="separator">></span> -->
+      <a href="profile" class="link">My Profile</a>
+    </header>
+
+
+  <div class="profile-card">
+    <!-- ซ้าย -->
+    <div class="left-panel">
+      <img
+        src="{{ user?.imapro || 'https://i.pinimg.com/736x/d8/27/f7/d827f7290d8cbe59388286dbd3d7cf63.jpg' }}"
+        alt="{{ user?.username || 'Guest User' }}"
+        class="profile-img"
+      />
+
+      
+      <div class="user-icon">
+        <a [routerLink]="['/update', user?.uid]" class="clickable">
+          <button class="btn">Edit profile</button>
+        </a> <br> <br>
+        <a href="">
+          <button class="btn">Logout</button>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- ขวา -->
+    <div class="right-panel">
+      <h1 class="username">{{ user?.username || 'Unknown User' }}</h1>
+      <p><strong>Email :</strong> {{ user?.email || 'No email available' }}</p>
+      <p><strong>Role :</strong> {{ user?.role || 'Not assigned' }}</p>
+      <p><strong>Date :</strong> {{ user?.created_at || 'xx/xx/xxxx' }}</p>
+      <p><strong>Amount Game :</strong> {{ user?.game_count || '0' }}</p>
+
+      <h3 class="list-title">List Game Library :</h3>
+
+      <!-- ถ้ามีเกม -->
+      <div class="game-list" *ngIf="user?.games?.length > 0; else noGames">
+        <div class="game-card" *ngFor="let g of user?.games">
+          <img src="{{ g.image }}" alt="{{ g.name }}" />
+          <div class="info">
+            <h4>{{ g.name }}</h4>
+            <p>Status : <span class="purchased">{{ g.status }}</span></p>
+            <p>Category : {{ g.category }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ถ้าไม่มีเกม -->
+      <ng-template #noGames>
+        <div class="game-list">
+          <div class="game-card">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/en/9/9e/Command_%26_Conquer_Red_Alert_2_-_Yuri%27s_Revenge_Coverart.png"
+              alt="Red Alert"
+            />
+            <div class="info">
+              <h4>Command &amp; Conquer Red Alert 2 Yuri Revenge</h4>
+              <p>Status : <span class="purchased">Purchased</span></p>
+              <p>Category : RTS</p>
+            </div>
+          </div>
+
+          <div class="game-card">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/en/e/e0/ARK_Survival_Evolved.jpg"
+              alt="Ark"
+            />
+            <div class="info">
+              <h4>Ark Survival Evolved</h4>
+              <p>Status : <span class="purchased">Purchased</span></p>
+              <p>Category : Action, Survival</p>
+            </div>
+          </div>
+
+          <div class="game-card">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/en/d/d2/Just_Cause_3_cover_art.jpg"
+              alt="Just Cause 3"
+            />
+            <div class="info">
+              <h4>Just Cause 3</h4>
+              <p>Status : <span class="purchased">Purchased</span></p>
+              <p>Category : Action</p>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<!-- ถ้ายังโหลดไม่เสร็จ -->
+<div *ngIf="!user" class="loading">
+  <p>Loading profile...</p>
+</div>
+

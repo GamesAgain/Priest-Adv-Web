@@ -1,0 +1,321 @@
+<p>editgame works!</p>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Game - Red Alert 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .header a {
+            color: #6c9bcf;
+            text-decoration: none;
+        }
+
+        .header a:hover {
+            color: #8fb9e8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .image-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #3a4f6c;
+            border-radius: 12px;
+            padding: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .image-box:hover {
+            border-color: #5a7fa6;
+            transform: translateY(-2px);
+        }
+
+        .image-box img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .edit-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .edit-icon svg {
+            width: 35px;
+            height: 35px;
+            fill: #fff;
+        }
+
+        .right-section {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #3a4f6c;
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #3a4f6c;
+            border-radius: 8px;
+            padding: 12px 45px 12px 15px;
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #5a7fa6;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+        }
+
+        .edit-button {
+            position: absolute;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .edit-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .edit-button svg {
+            width: 16px;
+            height: 16px;
+            fill: #fff;
+        }
+
+        .dropdown-icon {
+            position: absolute;
+            right: 15px;
+            pointer-events: none;
+        }
+
+        .dropdown-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #2d5f8d 0%, #3a7ba8 100%);
+            border: none;
+            color: #fff;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .submit-button:hover {
+            background: linear-gradient(135deg, #3a7ba8 0%, #4a8fc4 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(58, 123, 168, 0.4);
+        }
+
+        .release-date-text {
+            color: #8fb9e8;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <app-header-admin></app-header-admin>
+    <div class="header">
+        <a href="#">MainPage</a> > <span style="color: #999;">Edit Game</span>
+    </div>
+
+    <div class="container">
+        <div class="left-section">
+            <div class="image-box">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400'%3E%3Crect fill='%23c41e3a' width='300' height='400'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='white' font-size='24' font-family='Arial'%3ERED ALERT 2%3C/text%3E%3C/svg%3E" alt="Game Cover">
+                <div class="edit-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="image-box" style="height: 180px;">
+                <div class="edit-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <form>
+                <div class="form-group">
+                    <label>Input Name :</label>
+                    <div class="input-wrapper">
+                        <input type="text" value="Valorant" placeholder="Enter game name">
+                        <div class="edit-button">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Input Price :</label>
+                    <div class="input-wrapper">
+                        <input type="text" value="999.99 ฿" placeholder="Enter price">
+                        <div class="edit-button">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Category :</label>
+                    <div class="input-wrapper">
+                        <select>
+                            <option>Simulator</option>
+                            <option>Action</option>
+                            <option>Adventure</option>
+                            <option>RPG</option>
+                            <option>Strategy</option>
+                            <option>Sports</option>
+                        </select>
+                        <div class="dropdown-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 10l5 5 5-5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Release Date :</label>
+                    <div class="input-wrapper">
+                        <input type="text" value="Auto Timeline Now" readonly class="release-date-text" style="cursor: pointer;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description :</label>
+                    <div class="input-wrapper">
+                        <textarea placeholder="Edit Description"></textarea>
+                        <div class="edit-button" style="top: 15px;">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-button">Edit As Game on Page</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

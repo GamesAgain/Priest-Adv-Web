@@ -1,0 +1,25 @@
+<header>
+  <div class="header-container">
+    <div class="logo">GAMESTORE</div>
+    <button class="category-btn">Category</button>
+
+    <div class="user-info">
+      <span class="username">{{ user?.username }}</span>
+
+      <div class="wallet-info">
+        <span class="wallet-label">Wallet:</span>
+        <span class="wallet-amount">0 ฿</span>
+      </div>
+
+      <div class="user-icon">
+        <a [routerLink]="['/profile', user?.uid]" class="clickable">
+          <img src="{{user?.imapro}}" alt="{{ user?.username }}" />
+        </a>
+      </div>
+
+      <div class="cart-icon">
+        <img src="path_to_cart_icon" alt="Cart" />
+      </div>
+    </div>
+  </div>
+</header>

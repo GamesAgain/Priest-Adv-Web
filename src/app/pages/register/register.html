@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMESTORE - Register</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation Bar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 10px 40px 10px 20px;
+            border-radius: 25px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 250px;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 30px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Registration Form Container */
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .register-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .register-title {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+        }
+
+        .form-group input:focus {
+            border-bottom-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .file-upload {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .browse-btn {
+            background: rgba(255, 255, 255, 0.3);
+            color: rgba(0, 0, 0, 0.7);
+            padding: 10px 25px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .browse-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .file-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 16px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+        }
+
+        .register-submit {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .register-submit:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .back-link {
+            text-align: center;
+        }
+
+        .back-link a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .register-card {
+                padding: 30px 25px;
+            }
+
+            .search-input {
+                width: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">GAMESTORE</div>
+        <div class="nav-links">
+            <a href="#">Category</a>
+            <button class="login-btn">Login</button>
+        </div>
+    </nav>
+
+    <!-- Registration Form -->
+    <div class="container">
+        <div class="register-card">
+            <h1 class="register-title">Register User</h1>
+            
+            <form (ngSubmit)="onRegister()" enctype="multipart/form-data">
+  <div class="form-group">
+    <input
+      type="text"
+      placeholder="Username"
+      [(ngModel)]="username"
+      name="username"
+      required
+    />
+  </div>
+
+  <div class="form-group">
+    <input
+      type="email"
+      placeholder="Email"
+      [(ngModel)]="email"
+      name="email"
+      required
+    />
+  </div>
+
+  <div class="form-group">
+    <input
+      type="password"
+      placeholder="Password"
+      [(ngModel)]="password"
+      name="password"
+      required
+    />
+  </div>
+
+  <div class="form-group">
+    <input
+      type="password"
+      placeholder="Repeat-Password"
+      [(ngModel)]="confirmPassword"
+      name="confirmPassword"
+      required
+    />
+  </div>
+
+  <!-- ช่องเลือกไฟล์ -->
+  <div class="file-upload">
+    <label class="browse-btn" for="avatarInput">Browse</label>
+    <span class="file-label">{{
+      avatarFile ? avatarFile.name : 'Choose Image Profile'
+    }}</span>
+    <input
+      type="file"
+      id="avatarInput"
+      (change)="onFileSelected($event)"
+      accept="image/*"
+      hidden
+    />
+  </div>
+
+  <!-- <div class="form-group">
+                    <input type="date" placeholder="Date Birthday" required>
+                </div> -->
+
+  <div class="checkbox-group">
+    <input type="checkbox" id="ageConfirm" required />
+    <label for="ageConfirm">Users must be at least 16 years old.</label>
+  </div>
+
+  <button type="submit" class="register-submit">Register</button>
+
+  <!-- แสดงข้อความตอบกลับ -->
+  <p *ngIf="errorMessage" style="color: red">{{ errorMessage }}</p>
+  <p *ngIf="successMessage" style="color: limegreen">{{ successMessage }}</p>
+
+  <div class="back-link">
+    <a routerLink="/login">← Back to Login</a>
+  </div>
+</form>
+
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Registration functionality would be implemented here!');
+        });
+
+        document.querySelector('.browse-btn').addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(e) {
+                const fileName = e.target.files[0]?.name || 'Choose Image Profile';
+                document.querySelector('.file-label').textContent = fileName;
+            };
+            input.click();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<div class="profile-container" *ngIf="user">
+  <app-header></app-header>
+
+  <div class="profile-card">
+    <!-- รูปโปรไฟล์ -->
+    <div class="left-panel">
+      <div class="profile-image-wrapper" (click)="fileInput.click()">
+        <img
+          [src]="previewImage || user?.imapro"
+          alt="{{ user?.username }}"
+          class="profile-img clickable"
+        />
+        <div class="overlay-text">เปลี่ยนรูป</div>
+      </div>
+
+      <input
+        #fileInput
+        type="file"
+        accept="image/*"
+        (change)="onFileSelected($event)"
+        style="display: none"
+      />
+
+      <button class="btn" (click)="onSubmit()">ยืนยัน</button>
+    </div>
+
+    <!-- ข้อมูลผู้ใช้ -->
+    <div class="right-panel">
+      <h1 class="username-title">แก้ไขข้อมูลผู้ใช้</h1>
+
+      <div class="form-group">
+        <label>ชื่อผู้ใช้ใหม่ :</label>
+        <input
+          type="text"
+          [(ngModel)]="newUsername"
+          name="username"
+          class="input-field"
+          placeholder="กรอกชื่อใหม่..."
+        />
+      </div>
+
+      <p><strong>Email :</strong> {{ user?.email }}</p>
+      <p><strong>Role :</strong> {{ user?.role }}</p>
+      <p><strong>User ID :</strong> {{ user?.uid }}</p>
+    </div>
+  </div>
+</div>

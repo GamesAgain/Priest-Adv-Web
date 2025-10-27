@@ -1,0 +1,243 @@
+<!-- Login -->
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Header */
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+      }
+
+      .left-nav {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
+      }
+
+      .category-btn {
+        color: white;
+        font-size: 18px;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+
+      .right-nav {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 20px;
+        border-radius: 25px;
+        gap: 10px;
+      }
+
+      .search-box input {
+        background: none;
+        border: none;
+        color: white;
+        outline: none;
+        width: 150px;
+      }
+
+      .search-box input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .search-icon {
+        color: white;
+        cursor: pointer;
+      }
+
+      .btn-login-header {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 10px 30px;
+        border-radius: 20px;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-login-header:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(240, 147, 251, 0.5);
+      }
+
+      /* Login Container */
+      .login-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+      }
+
+      .login-box {
+        background: rgba(76, 81, 142, 0.7);
+        backdrop-filter: blur(20px);
+        padding: 60px 80px;
+        border-radius: 30px;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .login-title {
+        color: #d4af37;
+        font-size: 36px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .form-group {
+        margin-bottom: 30px;
+      }
+
+      .form-label {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 16px;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .form-input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+        padding: 12px 0;
+        color: white;
+        font-size: 16px;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+
+      .form-input:focus {
+        border-bottom-color: rgba(255, 255, 255, 0.8);
+      }
+
+      .form-input::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .btn-login {
+        width: 100%;
+        background: rgba(132, 122, 199, 0.8);
+        color: white;
+        padding: 15px;
+        border-radius: 15px;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: all 0.3s;
+      }
+
+      .btn-login:hover {
+        background: rgba(132, 122, 199, 1);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .links {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+      }
+
+      .link {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        cursor: pointer;
+        transition: color 0.3s;
+        text-decoration: none;
+      }
+
+      .link:hover {
+        color: white;
+      }
+    </style>
+  </head>
+ <body>
+    <header>
+        <!-- คุณสามารถเพิ่มโลโก้หรือลิงก์ใน header ได้ที่นี่ -->
+    </header>
+
+    <div class="login-container">
+        <div class="login-box">
+            <h1 class="login-title">Login</h1>
+            <form (ngSubmit)="onLogin()">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input
+                        type="text"
+                        class="form-input"
+                        placeholder="Enter username"
+                        [(ngModel)]="username"
+                        name="username"
+                        required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input
+                        type="password"
+                        class="form-input"
+                        placeholder="Enter password"
+                        [(ngModel)]="password"
+                        name="password"
+                        required
+                    />
+                </div>
+
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+
+            <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+            <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+
+            <div class="links">
+                <a href="register" class="link">Register Account</a>
+                <a href="#" class="link">Forgot Password</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
