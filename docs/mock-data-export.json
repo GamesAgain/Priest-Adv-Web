@@ -1,0 +1,189 @@
+{
+  "categories": [
+    "Action",
+    "Adventure",
+    "RPG",
+    "Strategy",
+    "Simulation",
+    "Sports",
+    "Indie"
+  ],
+  "users": [
+    {
+      "id": "admin_root",
+      "username": "admin",
+      "email": "admin@gamestore.dev",
+      "password": "admin123",
+      "role": "admin",
+      "walletBalance": 10000,
+      "ownedGames": [
+        "game_mhw",
+        "game_cod6"
+      ],
+      "discountCodesUsed": [],
+      "avatarUrl": null
+    },
+    {
+      "id": "user_demo",
+      "username": "demo",
+      "email": "demo@gamestore.dev",
+      "password": "demo123",
+      "role": "user",
+      "walletBalance": 500,
+      "ownedGames": [
+        "game_eafc25",
+        "game_stardew"
+      ],
+      "discountCodesUsed": [
+        "WELCOME10"
+      ],
+      "avatarUrl": null
+    }
+  ],
+  "games": [
+    {
+      "id": "game_mhw",
+      "title": "Monster Hunter Wilds",
+      "description": "Hunt gigantic monsters and craft epic gear in vibrant open areas.",
+      "price": 2590,
+      "category": "Action",
+      "releaseDate": "2025-02-28T00:00:00.000Z",
+      "totalSales": 4
+    },
+    {
+      "id": "game_cod6",
+      "title": "Call of Duty: Black Ops 6",
+      "description": "Tactical first person shooter with cinematic campaign and multiplayer.",
+      "price": 2441,
+      "category": "Action",
+      "releaseDate": "2024-10-25T00:00:00.000Z",
+      "totalSales": 3
+    },
+    {
+      "id": "game_eafc25",
+      "title": "EA Sports FC 25",
+      "description": "Authentic football simulation featuring global leagues and clubs.",
+      "price": 1120,
+      "category": "Sports",
+      "releaseDate": "2024-09-27T00:00:00.000Z",
+      "totalSales": 5
+    },
+    {
+      "id": "game_dyinglight",
+      "title": "Dying Light: The Beast",
+      "description": "Survive the night against ferocious infected with parkour combat.",
+      "price": 2099,
+      "category": "Adventure",
+      "releaseDate": "2025-09-18T00:00:00.000Z",
+      "totalSales": 2
+    },
+    {
+      "id": "game_lnight3",
+      "title": "Little Nightmares III",
+      "description": "Cooperative puzzle horror adventure in a dark whimsical world.",
+      "price": 1189.47,
+      "category": "Adventure",
+      "releaseDate": "2025-10-10T00:00:00.000Z",
+      "totalSales": 1
+    },
+    {
+      "id": "game_simcity",
+      "title": "SimCity Skylines",
+      "description": "Build and manage your dream metropolis with deep simulation systems.",
+      "price": 799,
+      "category": "Simulation",
+      "releaseDate": "2023-11-10T00:00:00.000Z",
+      "totalSales": 8
+    },
+    {
+      "id": "game_starfield",
+      "title": "Starfield",
+      "description": "Explore a vast universe filled with factions, quests and mysteries.",
+      "price": 2290,
+      "category": "RPG",
+      "releaseDate": "2023-09-06T00:00:00.000Z",
+      "totalSales": 6
+    },
+    {
+      "id": "game_bal",
+      "title": "Baldur's Gate 3",
+      "description": "Dungeons & Dragons storytelling with tactical combat and rich choices.",
+      "price": 1899,
+      "category": "RPG",
+      "releaseDate": "2023-08-03T00:00:00.000Z",
+      "totalSales": 10
+    },
+    {
+      "id": "game_cities",
+      "title": "Cities in Motion",
+      "description": "Master public transportation networks across iconic cities.",
+      "price": 650,
+      "category": "Strategy",
+      "releaseDate": "2022-05-11T00:00:00.000Z",
+      "totalSales": 7
+    },
+    {
+      "id": "game_stardew",
+      "title": "Stardew Valley",
+      "description": "Charming farming and life simulation with relaxing gameplay.",
+      "price": 450,
+      "category": "Indie",
+      "releaseDate": "2016-02-26T00:00:00.000Z",
+      "totalSales": 15
+    }
+  ],
+  "discountCodes": [
+    {
+      "id": "discount_welcome",
+      "code": "WELCOME10",
+      "description": "10% off for your first purchase",
+      "percentage": 10,
+      "maxUses": 100,
+      "usedCount": 1,
+      "perAccountLimit": 1,
+      "expiresAt": null
+    },
+    {
+      "id": "discount_flash",
+      "code": "FLASH25",
+      "description": "Limited time 25% discount for RPG titles",
+      "percentage": 25,
+      "maxUses": 20,
+      "usedCount": 0,
+      "perAccountLimit": 1,
+      "expiresAt": "2025-11-07T02:36:14.926Z"
+    },
+    {
+      "id": "discount_bigspend",
+      "code": "BIGSPENDER",
+      "description": "15% off orders above 2000฿",
+      "percentage": 15,
+      "maxUses": 50,
+      "usedCount": 0,
+      "perAccountLimit": 2,
+      "expiresAt": null
+    }
+  ],
+  "transactions": [
+    {
+      "id": "tx_seed1",
+      "userId": "user_demo",
+      "type": "topup",
+      "amount": 1000,
+      "createdAt": "2025-10-13T02:36:14.926Z"
+    },
+    {
+      "id": "tx_seed2",
+      "userId": "user_demo",
+      "type": "purchase",
+      "amount": 450,
+      "createdAt": "2025-10-14T02:36:14.926Z",
+      "details": {
+        "gameIds": [
+          "game_stardew"
+        ],
+        "discountCode": "WELCOME10"
+      }
+    }
+  ]
+}
