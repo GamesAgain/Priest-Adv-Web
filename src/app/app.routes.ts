@@ -9,6 +9,7 @@ import { Detail } from './pages/detail/detail';
 
 export const routes: Routes = [
     {path: '', component: Login},
+    {path: 'login', component: Login},
     {path: 'callapi', component: CallApi },
     {path: 'profile/:id', component: Profile},
     {path: 'register', component: Register},
