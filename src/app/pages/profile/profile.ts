@@ -1,98 +1,113 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgSwitch, NgSwitchCase } from '@angular/common';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { RouterLink, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { map, of, switchMap } from 'rxjs';
+import { Header } from '../header/header';
+import { AuthService } from '../../services/auth';
+import { MockBackendService } from '../../services/mock-backend.service';
+import { User, Game, Transaction } from '../../models';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, HttpClientModule, RouterLink],
+  imports: [CommonModule, NgSwitch, NgSwitchCase, FormsModule, Header],
   templateUrl: './profile.html',
   styleUrls: ['./profile.scss'],
 })
-export class Profile implements OnInit {
-  user: any = null;               // เก็บข้อมูลผู้ใช้
-  showPopup: boolean = false;     // ควบคุม popup แสดง/ซ่อน
-  newUsername: string = '';       // ค่า username ใหม่
-  selectedFile: File | null = null; // ไฟล์รูปใหม่ (avatar)
-  apiUrl = 'http://localhost:3000/users/update'; // ✅ API ของคุณ
+export class Profile {
+  private readonly auth = inject(AuthService);
+  private readonly backend = inject(MockBackendService);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
-  constructor(private http: HttpClient) {}
+  readonly user = signal<User | null>(null);
+  readonly username = signal('');
+  readonly email = signal('');
+  readonly avatarPreview = signal<string | null>(null);
+  readonly successMessage = signal('');
+  readonly errorMessage = signal('');
+  private avatarFile: File | null = null;
 
-  ngOnInit() {
-    this.loadUser();
+  readonly ownedGames$ = this.auth.currentUser$.pipe(
+    switchMap((user) => {
+      if (!user) {
+        return of([] as Game[]);
+      }
+      return this.backend.games$.pipe(
+        map((games) => games.filter((game) => user.ownedGames.includes(game.id)))
+      );
+    })
+  );
+
+  readonly transactions$ = this.auth.currentUser$.pipe(
+    switchMap((user) => (user ? this.backend.listTransactions(user.id) : of([] as Transaction[])))
+  );
+
+  constructor() {
+    this.auth.currentUser$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((user) => {
+      if (!user) {
+        this.router.navigate(['/']);
+        return;
+      }
+      this.user.set(user);
+      this.username.set(user.username);
+      this.email.set(user.email);
+      this.avatarPreview.set(user.avatarUrl ?? null);
+    });
   }
 
-  // โหลดข้อมูลผู้ใช้จาก localStorage
-  loadUser() {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      this.user = JSON.parse(userData);
-      console.log('✅ Loaded user:', this.user);
-    } else {
-      console.warn('⚠️ No user data found in localStorage');
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) {
+      return;
     }
+    this.avatarFile = input.files[0];
+    const reader = new FileReader();
+    reader.onload = () => this.avatarPreview.set(reader.result as string);
+    reader.readAsDataURL(this.avatarFile);
   }
 
-  // เปิด popup แก้ไข
-  openEditPopup() {
-    this.showPopup = true;
-    this.newUsername = this.user?.username || '';
-  }
-
-  // ปิด popup
-  closeEditPopup() {
-    this.showPopup = false;
-    this.newUsername = '';
-    this.selectedFile = null;
-  }
-
-  // เมื่อเลือกไฟล์จาก input
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-      console.log('📸 Selected file:', file.name);
-    }
-  }
-
-  // กดบันทึกข้อมูลใหม่
-  onSubmit() {
-    if (!this.user?.uid) {
-      alert('❌ ไม่พบ user_id');
+  async saveProfile(): Promise<void> {
+    const currentUser = this.user();
+    if (!currentUser) {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('uid', this.user.uid);          // user_id เดิมจาก localStorage
-    formData.append('username', this.newUsername);      // ชื่อใหม่
-    if (this.selectedFile) {
-      formData.append('avatar', this.selectedFile);     // รูปใหม่
+    try {
+      const avatarUrl = this.avatarFile ? await this.toBase64(this.avatarFile) : currentUser.avatarUrl;
+      this.backend
+        .updateUser(currentUser.id, {
+          username: this.username(),
+          email: this.email(),
+          avatarUrl: avatarUrl ?? undefined,
+        })
+        .subscribe({
+          next: (updated) => {
+            this.successMessage.set('Profile updated successfully');
+            this.errorMessage.set('');
+            this.avatarFile = null;
+            this.avatarPreview.set(updated.avatarUrl ?? null);
+            this.auth.refreshCurrentUser();
+          },
+          error: (error: Error) => {
+            this.errorMessage.set(error.message || 'Failed to update profile');
+            this.successMessage.set('');
+          },
+        });
+    } catch (error) {
+      this.errorMessage.set('Failed to read avatar file');
+      this.successMessage.set('');
     }
+  }
 
-    console.log('📤 Sending formData...', this.apiUrl);
-
-    // เรียก API POST
-    this.http.post(this.apiUrl, formData).subscribe({
-      next: (res: any) => {
-        console.log('✅ Update response:', res);
-
-        if (res?.user) {
-          // อัปเดตข้อมูลใน localStorage
-          localStorage.setItem('user', JSON.stringify(res.user));
-          this.user = res.user;
-
-          alert('✅ อัปเดตข้อมูลสำเร็จ!');
-          this.closeEditPopup();
-        } else {
-          alert('⚠️ อัปเดตเสร็จแต่ไม่พบข้อมูลผู้ใช้ใน response');
-        }
-      },
-      error: (err) => {
-        console.error('❌ Update error:', err);
-        alert('❌ ไม่สามารถอัปเดตข้อมูลได้');
-      },
+  private toBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (err) => reject(err);
+      reader.readAsDataURL(file);
     });
   }
 }

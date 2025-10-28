@@ -1,103 +1,190 @@
-<!-- <p>admin works now !</p> -->
-<body>
-    <!-- <app-header></app-header> -->
-    <app-header-admin></app-header-admin>
-    <div class="container">
+<app-header></app-header>
 
-        <div class="banner">
-            <h1>Public Relations</h1>
-            <div class="promotion">Promotion Game Sale 50% 🎉</div>
-            <div class="progress-bars">
-                <div class="progress-bar"></div>
-                <div class="progress-bar"></div>
-                <div class="progress-bar"></div>
-                <div class="progress-bar"></div>
-            </div>
-        </div>
-
-        <div class="categories">
-            <button class="category-chip active">All</button>
-            <button class="category-chip">RPG</button>
-            <button class="category-chip">Strategy</button>
-            <button class="category-chip">Simulation</button>
-            <button class="category-chip">Sports</button>
-            <button class="category-chip">Others</button>
-            <div class="search-box">
-                <input type="text" placeholder="search games...">
-                <span>🔍</span>
-            </div>
-        </div>
-
-        <div class="section-title">Best Seller Game</div>
-        <div class="game-list">
-            <div class="game-item">
-                <div class="rank">#1</div>
-                <div class="game-cover"></div>
-                <div class="game-info">
-                    <div class="game-title">Monster Hunter Wilds</div>
-                    <div class="game-price">- 2,590.00 ฿</div>
-                    <div class="game-meta">Category : Action , RPG<br>วางจำหน่าย : 28/2/2025</div>
-                </div>
-                <div class="game-actions">
-                    <button class="btn btn-detail">Edit</button>
-                    <button class="btn btn-buy">Buy</button>
-                </div>
-            </div>
-
-            <div class="game-item">
-                <div class="rank">#2</div>
-                <div class="game-cover"></div>
-                <div class="game-info">
-                    <div class="game-title">Call Of Duty Black OPS 6</div>
-                    <div class="game-price">- 2,441.00 ฿</div>
-                    <div class="game-meta">Category : Action<br>วางจำหน่าย : 25/10/2024</div>
-                </div>
-                <div class="game-actions">
-                    <button class="btn btn-detail">Edit</button>
-                    <button class="btn btn-buy">Buy</button>
-                </div>
-            </div>
-
-            <div class="game-item">
-                <div class="rank">#3</div>
-                <div class="game-cover"></div>
-                <div class="game-info">
-                    <div class="game-title">EA Sports FC 25</div>
-                    <div class="game-price">- 1,120.00 ฿</div>
-                    <div class="game-meta">Category : Sports<br>วางจำหน่าย : 27/9/2024</div>
-                </div>
-                <div class="game-actions">
-                    <button class="btn btn-detail">Edit</button>
-                    <button class="btn btn-buy">Buy</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-title">New Release</div>
-        <div class="new-releases">
-            <div class="new-game-card">
-                <div class="new-game-cover"></div>
-                <div class="new-game-title">Game Maa</div>
-                <div class="new-game-price">Price : 999.00 ฿</div>
-                <div class="new-game-meta">Category : Moba<br>Released : 1/9/2025</div>
-                <button class="btn-more">Edit</button>
-            </div>
-
-            <div class="new-game-card">
-                <div class="new-game-cover"></div>
-                <div class="new-game-title">Dying Light : The Beast</div>
-                <div class="new-game-price">Price : 2,099.00 ฿</div>
-                <div class="new-game-meta">Category : Action , Survival<br>Released : 18/9/2025</div>
-                <button class="btn-more">Edit</button>
-            </div>
-
-            <div class="new-game-card">
-                <div class="new-game-cover"></div>
-                <div class="new-game-title">Little Nightmares III</div>
-                <div class="new-game-price">Price : 1,189.47 ฿</div>
-                <div class="new-game-meta">Category : Horror<br>Released : 10/10/2025</div>
-                <button class="btn-more">Edit</button>
-            </div>
-        </div>
+<section class="admin-page">
+  <header class="intro">
+    <div>
+      <h1>Administration</h1>
+      <p>Manage games, discount codes, and review platform transactions.</p>
     </div>
-</body>
+    <div class="status">
+      <span class="label">Signed in as</span>
+      <span class="value">{{ currentUser()?.username }}</span>
+    </div>
+  </header>
+
+  <p class="success" *ngIf="successMessage()">{{ successMessage() }}</p>
+  <p class="error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+
+  <section class="panels">
+    <article class="panel">
+      <h2>{{ editingGameId ? 'Edit game' : 'Add new game' }}</h2>
+      <form (ngSubmit)="submitGame()">
+        <label>
+          <span>Title</span>
+          <input type="text" [(ngModel)]="gameForm.title" name="gameTitle" required />
+        </label>
+        <label>
+          <span>Description</span>
+          <textarea [(ngModel)]="gameForm.description" name="gameDescription" required></textarea>
+        </label>
+        <div class="grid">
+          <label>
+            <span>Price (฿)</span>
+            <input type="number" min="1" step="0.01" [(ngModel)]="gameForm.price" name="gamePrice" required />
+          </label>
+          <label>
+            <span>Category</span>
+            <select [(ngModel)]="gameForm.category" name="gameCategory">
+              <option *ngFor="let category of (categories$ | async)" [value]="category">{{ category }}</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span>Cover image</span>
+          <input type="file" accept="image/*" (change)="onGameFileSelected($event)" />
+        </label>
+
+        <div class="actions">
+          <button type="submit">{{ editingGameId ? 'Update game' : 'Create game' }}</button>
+          <button type="button" (click)="resetGameForm()" *ngIf="editingGameId">Cancel</button>
+        </div>
+      </form>
+    </article>
+
+    <article class="panel">
+      <h2>{{ editingDiscountId ? 'Edit discount code' : 'Create discount code' }}</h2>
+      <form (ngSubmit)="submitDiscount()">
+        <label>
+          <span>Code</span>
+          <input type="text" [(ngModel)]="discountForm.code" name="discountCode" required />
+        </label>
+        <label>
+          <span>Description</span>
+          <textarea [(ngModel)]="discountForm.description" name="discountDescription" required></textarea>
+        </label>
+        <div class="grid">
+          <label>
+            <span>Discount (%)</span>
+            <input type="number" min="1" max="100" [(ngModel)]="discountForm.percentage" name="discountPercentage" required />
+          </label>
+          <label>
+            <span>Max uses</span>
+            <input type="number" min="1" [(ngModel)]="discountForm.maxUses" name="discountMaxUses" required />
+          </label>
+          <label>
+            <span>Per account limit</span>
+            <input type="number" min="1" [(ngModel)]="discountForm.perAccountLimit" name="discountLimit" required />
+          </label>
+          <label>
+            <span>Expires</span>
+            <input type="date" [(ngModel)]="discountForm.expiresAt" name="discountExpires" />
+          </label>
+        </div>
+        <div class="actions">
+          <button type="submit">{{ editingDiscountId ? 'Update discount' : 'Create discount' }}</button>
+          <button type="button" (click)="resetDiscountForm()" *ngIf="editingDiscountId">Cancel</button>
+        </div>
+      </form>
+    </article>
+  </section>
+
+  <section class="tables">
+    <article class="table-panel">
+      <header>
+        <h2>Game catalog ({{ games().length }})</h2>
+      </header>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Release date</th>
+            <th>Sales</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let game of games()">
+            <td>{{ game.title }}</td>
+            <td>{{ game.category }}</td>
+            <td>{{ game.price | number:'1.2-2' }} ฿</td>
+            <td>{{ game.releaseDate | date:'mediumDate' }}</td>
+            <td>{{ game.totalSales }}</td>
+            <td class="actions">
+              <button type="button" (click)="editGame(game)">Edit</button>
+              <button type="button" class="danger" (click)="deleteGame(game.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+
+    <article class="table-panel">
+      <header>
+        <h2>Discount codes ({{ discounts().length }})</h2>
+      </header>
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Description</th>
+            <th>Percent</th>
+            <th>Usage</th>
+            <th>Per account</th>
+            <th>Expires</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let discount of discounts()">
+            <td>{{ discount.code }}</td>
+            <td>{{ discount.description }}</td>
+            <td>{{ discount.percentage }}%</td>
+            <td>{{ discount.usedCount }}/{{ discount.maxUses }}</td>
+            <td>{{ discount.perAccountLimit }}</td>
+            <td>{{ discount.expiresAt ? (discount.expiresAt | date:'mediumDate') : 'No expiry' }}</td>
+            <td class="actions">
+              <button type="button" (click)="editDiscount(discount)">Edit</button>
+              <button type="button" class="danger" (click)="deleteDiscount(discount.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+
+    <article class="table-panel">
+      <header>
+        <h2>Transactions ({{ transactions().length }})</h2>
+      </header>
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Details</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tx of transactions()">
+            <td>{{ users()[tx.userId]?.username || tx.userId }}</td>
+            <td>{{ tx.type | titlecase }}</td>
+            <td>{{ tx.amount | number:'1.2-2' }} ฿</td>
+            <td>
+              <ng-container [ngSwitch]="tx.type">
+                <span *ngSwitchCase="'topup'">Wallet top-up</span>
+                <span *ngSwitchCase="'purchase'">
+                  {{ tx.details?.gameIds?.length || 0 }} games
+                  <span *ngIf="tx.details?.discountCode">with {{ tx.details?.discountCode }}</span>
+                </span>
+              </ng-container>
+            </td>
+            <td>{{ tx.createdAt | date:'medium' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+  </section>
+</section>

@@ -1,25 +1,37 @@
-<header>
-  <div class="header-container">
-    <div class="logo">GAMESTORE</div>
-    <button class="category-btn">Category</button>
+<header class="app-header">
+  <div class="brand" routerLink="/callapi">GameForge</div>
 
-    <div class="user-info">
-      <span class="username">{{ user?.username }}</span>
+  <nav class="primary-nav">
+    <a routerLink="/callapi" routerLinkActive="active">Store</a>
+    <a routerLink="/library" routerLinkActive="active">Library</a>
+    <a routerLink="/wallet" routerLinkActive="active">Wallet</a>
+    <a *ngIf="(user$ | async)?.role === 'admin'" routerLink="/admin" routerLinkActive="active">Admin</a>
+  </nav>
 
-      <div class="wallet-info">
-        <span class="wallet-label">Wallet:</span>
-        <span class="wallet-amount">0 ฿</span>
+  <div class="header-actions">
+    <ng-container *ngIf="cartState$ | async as cart">
+      <div class="cart-chip" routerLink="/callapi">
+        <span class="icon">🛒</span>
+        <span class="label">Cart</span>
+        <span class="count">{{ cart.items.length }}</span>
       </div>
+    </ng-container>
 
-      <div class="user-icon">
-        <a [routerLink]="['/profile', user?.uid]" class="clickable">
-          <img src="{{user?.imapro}}" alt="{{ user?.username }}" />
-        </a>
+    <ng-container *ngIf="user$ | async as user; else guestLinks">
+      <div class="wallet" routerLink="/wallet">
+        <span class="label">Balance</span>
+        <span class="amount">{{ user.walletBalance | number:'1.2-2' }} ฿</span>
       </div>
+      <button class="profile" routerLink="['/profile', user.id]">
+        <img [src]="user.avatarUrl || 'https://avatars.dicebear.com/api/initials/' + user.username + '.svg'" [alt]="user.username" />
+        <span class="username">{{ user.username }}</span>
+      </button>
+      <button class="logout" type="button" (click)="logout()">Sign out</button>
+    </ng-container>
 
-      <div class="cart-icon">
-        <img src="path_to_cart_icon" alt="Cart" />
-      </div>
-    </div>
+    <ng-template #guestLinks>
+      <a class="cta" routerLink="/register">Create account</a>
+      <a class="cta" routerLink="/">Sign in</a>
+    </ng-template>
   </div>
 </header>

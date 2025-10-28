@@ -1,2 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
-// @use '@angular/material' as mat;
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  font-family: 'Segoe UI', 'Noto Sans Thai', 'Prompt', sans-serif;
+  background: linear-gradient(160deg, #0b0820, #1f1441);
+  color: #f5f5ff;
+  min-height: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+body {
+  background-attachment: fixed;
+}
