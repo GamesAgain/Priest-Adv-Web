@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 
 @Component({
@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth';
   standalone: true,
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
 })
 export class Register {
   username = '';
