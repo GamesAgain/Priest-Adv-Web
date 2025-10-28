@@ -38,18 +38,35 @@
         <div class="grid">
           <label>
             <span>Display name</span>
-            <input type="text" [(ngModel)]="username" name="username" required />
+            <input
+              type="text"
+              name="username"
+              [ngModel]="username()"
+              (ngModelChange)="username.set($event)"
+              required
+              autocomplete="name"
+            />
           </label>
           <label>
             <span>Email</span>
-            <input type="email" [(ngModel)]="email" name="email" required />
+            <input
+              type="email"
+              name="email"
+              [ngModel]="email()"
+              (ngModelChange)="email.set($event)"
+              required
+              autocomplete="email"
+            />
           </label>
         </div>
 
         <p class="success" *ngIf="successMessage()">{{ successMessage() }}</p>
         <p class="error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
 
-        <button type="submit">Save changes</button>
+        <button type="submit" [disabled]="isSaving()">
+          <span *ngIf="!isSaving(); else saving">Save changes</span>
+        </button>
+        <ng-template #saving>Saving…</ng-template>
       </form>
     </section>
 
@@ -77,40 +94,46 @@
 
     <section class="transactions">
       <h2>Recent activity</h2>
-      <table *ngIf="transactions$ | async as transactions">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Details</th>
-            <th class="amount">Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let tx of transactions">
-            <td>{{ tx.createdAt | date:'medium' }}</td>
-            <td>{{ tx.type | titlecase }}</td>
-            <td>
-              <ng-container [ngSwitch]="tx.type">
-                <span *ngSwitchCase="'topup'">Wallet top-up</span>
-                <span *ngSwitchCase="'purchase'">
-                  Purchase {{ tx.details?.gameIds?.length || 0 }} game(s)
-                  <span *ngIf="tx.details?.discountCode"> • Code {{ tx.details?.discountCode }}</span>
-                </span>
-              </ng-container>
-            </td>
-            <td class="amount" [class.negative]="tx.type === 'purchase'">
-              {{ tx.type === 'purchase' ? '-' : '+' }}{{ tx.amount | number:'1.2-2' }} ฿
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <ng-container *ngIf="transactions$ | async as transactions">
+        <table *ngIf="transactions.length; else noTransactions">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Details</th>
+              <th class="amount">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tx of transactions">
+              <td>{{ tx.createdAt | date:'medium' }}</td>
+              <td>{{ tx.type | titlecase }}</td>
+              <td>
+                <ng-container [ngSwitch]="tx.type">
+                  <span *ngSwitchCase="'topup'">Wallet top-up</span>
+                  <span *ngSwitchCase="'purchase'">
+                    Purchase {{ tx.details?.gameIds?.length || 0 }} game(s)
+                    <span *ngIf="tx.details?.discountCode"> • Code {{ tx.details?.discountCode }}</span>
+                  </span>
+                </ng-container>
+              </td>
+              <td class="amount" [class.negative]="tx.type === 'purchase'">
+                {{ tx.type === 'purchase' ? '-' : '+' }}{{ tx.amount | number:'1.2-2' }} ฿
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
     </section>
   </section>
 </ng-container>
 
 <ng-template #emptyLibrary>
   <p class="empty">No games purchased yet. Start exploring the store!</p>
+</ng-template>
+
+<ng-template #noTransactions>
+  <p class="empty">No transactions yet. Your future activity will appear here.</p>
 </ng-template>
 
 <ng-template #loading>

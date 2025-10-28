@@ -22,7 +22,7 @@
         <span class="label">Balance</span>
         <span class="amount">{{ user.walletBalance | number:'1.2-2' }} ฿</span>
       </div>
-      <button class="profile" routerLink="['/profile', user.id]">
+      <button class="profile" [routerLink]="['/profile', user.id]">
         <img [src]="user.avatarUrl || 'https://avatars.dicebear.com/api/initials/' + user.username + '.svg'" [alt]="user.username" />
         <span class="username">{{ user.username }}</span>
       </button>
