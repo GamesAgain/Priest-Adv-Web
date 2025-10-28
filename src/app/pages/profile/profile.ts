@@ -3,7 +3,7 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { map, of, switchMap } from 'rxjs';
+import { firstValueFrom, map, of, switchMap } from 'rxjs';
 import { Header } from '../header/header';
 import { AuthService } from '../../services/auth';
 import { MockBackendService } from '../../services/mock-backend.service';
@@ -28,6 +28,7 @@ export class Profile {
   readonly avatarPreview = signal<string | null>(null);
   readonly successMessage = signal('');
   readonly errorMessage = signal('');
+  readonly isSaving = signal(false);
   private avatarFile: File | null = null;
 
   readonly ownedGames$ = this.auth.currentUser$.pipe(
@@ -71,34 +72,63 @@ export class Profile {
 
   async saveProfile(): Promise<void> {
     const currentUser = this.user();
-    if (!currentUser) {
+    if (!currentUser || this.isSaving()) {
+      return;
+    }
+
+    this.isSaving.set(true);
+    this.successMessage.set('');
+    this.errorMessage.set('');
+
+    let avatarUrl = currentUser.avatarUrl ?? null;
+
+    try {
+      if (this.avatarFile) {
+        avatarUrl = await this.toBase64(this.avatarFile);
+      }
+    } catch (readError) {
+      const message =
+        readError instanceof Error
+          ? readError.message || 'Failed to read avatar file'
+          : 'Failed to read avatar file';
+      this.errorMessage.set(message);
+      this.isSaving.set(false);
       return;
     }
 
     try {
-      const avatarUrl = this.avatarFile ? await this.toBase64(this.avatarFile) : currentUser.avatarUrl;
-      this.backend
-        .updateUser(currentUser.id, {
-          username: this.username(),
-          email: this.email(),
+      const updated = await firstValueFrom(
+        this.backend.updateUser(currentUser.id, {
+          username: this.username().trim(),
+          email: this.email().trim(),
           avatarUrl: avatarUrl ?? undefined,
         })
-        .subscribe({
-          next: (updated) => {
-            this.successMessage.set('Profile updated successfully');
-            this.errorMessage.set('');
-            this.avatarFile = null;
-            this.avatarPreview.set(updated.avatarUrl ?? null);
-            this.auth.refreshCurrentUser();
-          },
-          error: (error: Error) => {
-            this.errorMessage.set(error.message || 'Failed to update profile');
-            this.successMessage.set('');
-          },
-        });
+      );
+
+      this.user.set(updated);
+      this.username.set(updated.username);
+      this.email.set(updated.email);
+      this.avatarPreview.set(updated.avatarUrl ?? null);
+      this.avatarFile = null;
+      this.successMessage.set('Profile updated successfully');
+      this.auth.refreshCurrentUser();
     } catch (error) {
-      this.errorMessage.set('Failed to read avatar file');
-      this.successMessage.set('');
+      let message = 'Failed to update profile';
+      if (error instanceof Error && error.message) {
+        message = error.message;
+      } else if (typeof error === 'string') {
+        message = error;
+      } else if (
+        error &&
+        typeof error === 'object' &&
+        'message' in error &&
+        typeof (error as { message: unknown }).message === 'string'
+      ) {
+        message = (error as { message: string }).message;
+      }
+      this.errorMessage.set(message);
+    } finally {
+      this.isSaving.set(false);
     }
   }
 
