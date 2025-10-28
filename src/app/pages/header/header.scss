@@ -1,349 +1,176 @@
-// * {
-//     margin: 0;
-//     padding: 0;
-//     box-sizing: border-box;
-// }
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #1f1b3a, #2d1f4f);
+  color: #f5f5f5;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(17, 12, 34, 0.4);
+  position: sticky;
+  top: 1.5rem;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+}
 
-// body {
-//     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-//     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-//     min-height: 100vh;
-//     padding: 20px;
-// }
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+}
 
-// .container {
-//     max-width: 1200px;
-//     margin: 0 auto;
-// }
+.primary-nav {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  a {
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 
-// /* Header */
-// header {
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
-//     margin-bottom: 30px;
-// }
-
-// .logo {
-//     font-size: 32px;
-//     font-weight: bold;
-//     color: white;
-// }
-
-// .category-btn {
-//     color: white;
-//     font-size: 24px;
-//     background: none;
-//     border: none;
-//     cursor: pointer;
-// }
-
-// .btn-login {
-//     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-//     color: white;
-//     padding: 12px 40px;
-//     border-radius: 25px;
-//     border: none;
-//     font-size: 18px;
-//     font-weight: bold;
-//     cursor: pointer;
-//     transition: all 0.3s;
-//     box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
-// }
-
-// .btn-login:hover {
-//     transform: translateY(-2px);
-//     box-shadow: 0 6px 20px rgba(240, 147, 251, 0.6);
-// }
-
-// /* Banner */
-// .banner {
-//     background: rgba(76, 81, 142, 0.6);
-//     backdrop-filter: blur(10px);
-//     padding: 40px;
-//     border-radius: 20px;
-//     margin-bottom: 30px;
-// }
-
-// .banner h1 {
-//     color: white;
-//     font-size: 48px;
-//     margin-bottom: 20px;
-// }
-
-// .promotion {
-//     color: white;
-//     font-size: 36px;
-//     margin-bottom: 30px;
-// }
-
-// .progress-bars {
-//     display: flex;
-//     gap: 15px;
-// }
-
-// .progress-bar {
-//     flex: 1;
-//     height: 8px;
-//     background: rgba(255, 255, 255, 0.5);
-//     border-radius: 4px;
-// }
-
-// /* Category Filter */
-// .categories {
-//     display: flex;
-//     gap: 15px;
-//     margin-bottom: 30px;
-//     align-items: center;
-// }
-
-// .category-chip {
-//     padding: 12px 30px;
-//     border-radius: 25px;
-//     border: none;
-//     font-size: 16px;
-//     font-weight: 600;
-//     cursor: pointer;
-//     transition: all 0.3s;
-// }
-
-// .category-chip.active {
-//     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-//     color: white;
-// }
-
-// .category-chip:not(.active) {
-//     background: rgba(255, 255, 255, 0.3);
-//     color: white;
-// }
-
-// .search-box {
-//     margin-left: auto;
-//     display: flex;
-//     align-items: center;
-//     background: rgba(255, 255, 255, 0.3);
-//     padding: 10px 20px;
-//     border-radius: 25px;
-//     gap: 10px;
-// }
-
-// .search-box input {
-//     background: none;
-//     border: none;
-//     color: white;
-//     outline: none;
-//     width: 200px;
-// }
-
-// .search-box input::placeholder {
-//     color: rgba(255, 255, 255, 0.7);
-// }
-
-// /* Best Seller */
-// .section-title {
-//     color: white;
-//     font-size: 24px;
-//     margin-bottom: 20px;
-//     font-weight: bold;
-// }
-
-// .game-list {
-//     display: flex;
-//     flex-direction: column;
-//     gap: 15px;
-//     margin-bottom: 40px;
-// }
-
-// .game-item {
-//     display: flex;
-//     align-items: center;
-//     background: rgba(117, 105, 184, 0.5);
-//     backdrop-filter: blur(10px);
-//     padding: 20px;
-//     border-radius: 15px;
-//     gap: 20px;
-// }
-
-// .rank {
-//     font-size: 32px;
-//     font-weight: bold;
-//     color: rgba(255, 255, 255, 0.5);
-//     min-width: 60px;
-// }
-
-// .game-cover {
-//     width: 80px;
-//     height: 80px;
-//     background: #333;
-//     border-radius: 10px;
-// }
-
-// .game-info {
-//     flex: 1;
-// }
-
-// .game-title {
-//     color: white;
-//     font-size: 20px;
-//     font-weight: bold;
-//     margin-bottom: 5px;
-// }
-
-// .game-price {
-//     color: white;
-//     font-size: 18px;
-// }
-
-// .game-meta {
-//     color: rgba(255, 255, 255, 0.8);
-//     font-size: 14px;
-//     margin-top: 5px;
-// }
-
-// .game-actions {
-//     display: flex;
-//     gap: 10px;
-// }
-
-// .btn {
-//     padding: 12px 30px;
-//     border-radius: 10px;
-//     border: none;
-//     font-size: 16px;
-//     font-weight: 600;
-//     cursor: pointer;
-//     transition: all 0.3s;
-// }
-
-// .btn-detail {
-//     background: rgba(132, 122, 199, 0.8);
-//     color: white;
-// }
-
-// .btn-buy {
-//     background: #4a7c59;
-//     color: white;
-// }
-
-// .btn:hover {
-//     transform: translateY(-2px);
-//     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-// }
-
-// /* New Release */
-// .new-releases {
-//     display: grid;
-//     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-//     gap: 20px;
-// }
-
-// .new-game-card {
-//     background: rgba(117, 105, 184, 0.5);
-//     backdrop-filter: blur(10px);
-//     border-radius: 15px;
-//     padding: 20px;
-//     text-align: center;
-// }
-
-// .new-game-cover {
-//     width: 100%;
-//     height: 150px;
-//     background: #333;
-//     border-radius: 10px;
-//     margin-bottom: 15px;
-// }
-
-// .new-game-title {
-//     color: white;
-//     font-size: 20px;
-//     font-weight: bold;
-//     margin-bottom: 10px;
-// }
-
-// .new-game-price {
-//     color: white;
-//     font-size: 18px;
-//     margin-bottom: 5px;
-// }
-
-// .new-game-meta {
-//     color: rgba(255, 255, 255, 0.8);
-//     font-size: 14px;
-//     margin-bottom: 15px;
-// }
-
-// .btn-more {
-//     background: rgba(132, 122, 199, 0.8);
-//     color: white;
-//     padding: 10px 25px;
-//     border-radius: 8px;
-//     border: none;
-//     cursor: pointer;
-//     font-size: 14px;
-// }
-
-header {
-    background: linear-gradient(90deg, #6a5acd, #8a2be2); /* Gradient background */
-    padding: 15px 30px; /* Padding for the header */
-    
-    .header-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between; /* Space between logo and user info */
-        color: white; /* Text color */
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
-        .category-btn {
-            background-color: #ff69b4; /* Button background */
-            color: white; /* Button text color */
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-
-            &:hover {
-                background-color: #ff1493; /* Button hover color */
-            }
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 20px; /* Space between user info elements */
-            
-            .username {
-                font-size: 18px;
-                font-weight: 600;
-            }
-            
-            .wallet-info {
-                display: flex;
-                align-items: center;
-                
-                .wallet-label {
-                    margin-right: 5px;
-                }
-                
-                .wallet-amount {
-                    font-weight: bold;
-                }
-            }
-            
-            .user-icon img {
-                width: 40px; /* Icon size */
-                height: 40px; /* Icon size */
-                border-radius: 50%; /* Circular profile image */
-            }
-            
-            .cart-icon img {
-                width: 24px; /* Cart icon size */
-                height: 24px; /* Cart icon size */
-            }
-        }
+    &.active,
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      transform: translateY(-1px);
     }
+  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cart-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .label {
+    font-weight: 600;
+  }
+
+  .count {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+    font-size: 0.75rem;
+  }
+}
+
+.wallet {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0.75rem;
+  background: rgba(37, 255, 216, 0.12);
+  border-radius: 10px;
+  min-width: 120px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  .label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .amount {
+    font-weight: 700;
+    color: #25ffd8;
+  }
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  cursor: pointer;
+  color: inherit;
+  transition: transform 0.3s ease, background 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.16);
+    transform: translateY(-1px);
+  }
+
+  img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .username {
+    font-weight: 600;
+  }
+}
+
+.logout {
+  border: none;
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(245, 87, 108, 0.35);
+  }
+}
+
+.cta {
+  color: white;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+@media (max-width: 900px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .primary-nav {
+    flex-wrap: wrap;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
 }

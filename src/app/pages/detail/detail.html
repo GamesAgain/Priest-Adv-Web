@@ -1,0 +1,54 @@
+<app-header></app-header>
+
+<ng-container *ngIf="user() as currentUser">
+  <section class="library-page">
+    <header class="top-bar">
+      <div>
+        <h1>{{ currentUser.username }}'s Library</h1>
+        <p>Browse and revisit the games you already own.</p>
+      </div>
+      <input
+        type="search"
+        placeholder="Search your games"
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+      />
+    </header>
+
+    <div class="library-grid">
+      <article class="game-card" *ngFor="let game of filteredGames" (click)="viewGame(game)">
+        <div class="cover" [style.background-image]="'url(' + (game.coverImage || 'https://picsum.photos/seed/' + game.id + '/500/350') + ')'">
+          <span class="category">{{ game.category }}</span>
+        </div>
+        <div class="details">
+          <h2>{{ game.title }}</h2>
+          <p>{{ game.description }}</p>
+          <div class="meta">
+            <span>{{ game.price | number:'1.2-2' }} ฿</span>
+            <small>Released {{ game.releaseDate | date:'mediumDate' }}</small>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <p class="empty" *ngIf="!filteredGames.length">No games match your search.</p>
+  </section>
+
+  <aside class="drawer" *ngIf="selectedGame() as game">
+    <button type="button" class="close" (click)="closeDetail()">×</button>
+    <img [src]="game.coverImage || 'https://picsum.photos/seed/' + game.id + '/600/400'" [alt]="game.title" />
+    <h2>{{ game.title }}</h2>
+    <span class="category">{{ game.category }}</span>
+    <p class="description">{{ game.description }}</p>
+    <dl>
+      <div>
+        <dt>Price</dt>
+        <dd>{{ game.price | number:'1.2-2' }} ฿</dd>
+      </div>
+      <div>
+        <dt>Release date</dt>
+        <dd>{{ game.releaseDate | date:'fullDate' }}</dd>
+      </div>
+    </dl>
+  </aside>
+</ng-container>

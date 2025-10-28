@@ -1,256 +1,73 @@
-<!-- <p>wallet works!</p> -->
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Wallet - Recharge</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<app-header></app-header>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .breadcrumb {
-            color: white;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-
-        .breadcrumb a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .wallet-display {
-            background: rgba(30, 41, 59, 0.8);
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .wallet-display h1 {
-            color: white;
-            font-size: 36px;
-            font-weight: 600;
-        }
-
-        .wallet-amount {
-            color: white;
-            font-size: 48px;
-            font-weight: bold;
-        }
-
-        .section-title {
-            color: white;
-            font-size: 28px;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .amount-buttons {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .amount-btn {
-            background: rgba(100, 116, 139, 0.8);
-            color: white;
-            border: none;
-            padding: 25px;
-            font-size: 32px;
-            font-weight: 600;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .amount-btn:hover {
-            background: rgba(120, 136, 159, 0.9);
-            transform: translateY(-2px);
-        }
-
-        .amount-btn.active {
-            background: rgba(139, 92, 246, 0.8);
-        }
-
-        .custom-input-section {
-            margin-bottom: 30px;
-        }
-
-        .input-label {
-            color: white;
-            font-size: 20px;
-            margin-bottom: 15px;
-            display: block;
-            font-weight: 500;
-        }
-
-        .custom-input {
-            width: 100%;
-            max-width: 400px;
-            padding: 15px 20px;
-            font-size: 18px;
-            border: none;
-            border-radius: 8px;
-            background: rgba(148, 163, 184, 0.3);
-            color: rgba(255, 255, 255, 0.5);
-            margin-left: auto;
-            display: block;
-        }
-
-        .warning-text {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
-            text-align: center;
-            margin: 15px 0 25px 0;
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .checkbox-container input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
-            margin-right: 15px;
-            cursor: pointer;
-        }
-
-        .checkbox-container label {
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .recharge-btn {
-            background: rgba(20, 184, 166, 0.8);
-            color: white;
-            border: none;
-            padding: 18px 50px;
-            font-size: 20px;
-            font-weight: 600;
-            border-radius: 10px;
-            cursor: pointer;
-            float: right;
-            transition: all 0.3s ease;
-        }
-
-        .recharge-btn:hover {
-            background: rgba(20, 184, 166, 1);
-            transform: translateY(-2px);
-        }
-
-        .recharge-btn:disabled {
-            background: rgba(100, 116, 139, 0.5);
-            cursor: not-allowed;
-        }
-
-        .clearfix::after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-    </style>
-</head>
-<body>
-    <app-header></app-header>
-    <div class="breadcrumb">
-        <a href="#">MainPage</a> > My Wallet
+<ng-container *ngIf="user() as currentUser">
+  <section class="wallet-page">
+    <div class="balance-card">
+      <div>
+        <h1>Wallet balance</h1>
+        <p>Your GameForge credits available to spend</p>
+      </div>
+      <span class="amount">{{ currentUser.walletBalance | number:'1.2-2' }} ฿</span>
     </div>
 
-    <div class="container">
-        <div class="wallet-display">
-            <h1>Your Wallet :</h1>
-            <div class="wallet-amount" id="walletAmount">99,999.00 ฿</div>
-        </div>
+    <section class="topup-card">
+      <h2>Recharge wallet</h2>
+      <div class="options">
+        <button
+          type="button"
+          *ngFor="let option of topUpOptions"
+          [class.active]="selectedAmount() === option"
+          (click)="selectAmount(option)"
+        >
+          {{ option | number:'1.0-0' }} ฿
+        </button>
+      </div>
 
-        <h2 class="section-title">Recharge Your Wallet</h2>
+      <label class="custom-input">
+        <span>Custom amount</span>
+        <input type="number" min="1" (input)="onCustomAmountChange($event.target.value)" />
+      </label>
 
-        <div class="amount-buttons">
-            <button class="amount-btn" data-amount="100">100</button>
-            <button class="amount-btn" data-amount="100">200</button>
-            <button class="amount-btn" data-amount="100">300</button>
-            <button class="amount-btn" data-amount="100">500</button>
-            <button class="amount-btn" data-amount="100">1000</button>
-            <button class="amount-btn" data-amount="5000">5000</button>
-        </div>
+      <p class="success" *ngIf="successMessage()">{{ successMessage() }}</p>
+      <p class="error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
 
-        <div class="custom-input-section">
-            <label class="input-label">Input Your Amount to Recharge Wallet</label>
-            <input type="text" class="custom-input" placeholder="Ex 50, 100, 200, 3000" id="customAmount">
-        </div>
+      <button type="button" class="topup" (click)="topUp()">Add funds</button>
+    </section>
 
-        <p class="warning-text">*** Don't below 50 Baht to rechange wallet</p>
+    <section class="history-card">
+      <h2>Transaction history</h2>
+      <table *ngIf="transactions.length; else emptyHistory">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Details</th>
+            <th class="amount">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tx of transactions">
+            <td>{{ tx.createdAt | date:'medium' }}</td>
+            <td>{{ tx.type | titlecase }}</td>
+            <td>
+              <ng-container [ngSwitch]="tx.type">
+                <span *ngSwitchCase="'topup'">Wallet top-up</span>
+                <span *ngSwitchCase="'purchase'">
+                  Purchased {{ tx.details?.gameIds?.length || 0 }} game(s)
+                  <span *ngIf="tx.details?.discountCode">with code {{ tx.details?.discountCode }}</span>
+                </span>
+              </ng-container>
+            </td>
+            <td class="amount" [class.negative]="tx.type === 'purchase'">
+              {{ tx.type === 'purchase' ? '-' : '+' }}{{ tx.amount | number:'1.2-2' }} ฿
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </section>
+</ng-container>
 
-        <div class="checkbox-container">
-            <input type="checkbox" id="agreeCheckbox">
-            <label for="agreeCheckbox">Agree to Recharge Wallet</label>
-        </div>
-
-        <div class="clearfix">
-            <button class="recharge-btn" id="rechargeBtn" disabled>Recharge Wallet</button>
-        </div>
-    </div>
-
-    <script>
-        let selectedAmount = 0;
-        const amountButtons = document.querySelectorAll('.amount-btn');
-        const customInput = document.getElementById('customAmount');
-        const agreeCheckbox = document.getElementById('agreeCheckbox');
-        const rechargeBtn = document.getElementById('rechargeBtn');
-
-        amountButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                amountButtons.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                selectedAmount = parseInt(this.dataset.amount);
-                customInput.value = '';
-                updateRechargeButton();
-            });
-        });
-
-        customInput.addEventListener('input', function() {
-            amountButtons.forEach(b => b.classList.remove('active'));
-            selectedAmount = parseInt(this.value) || 0;
-            updateRechargeButton();
-        });
-
-        agreeCheckbox.addEventListener('change', updateRechargeButton);
-
-        function updateRechargeButton() {
-            if (agreeCheckbox.checked && selectedAmount >= 50) {
-                rechargeBtn.disabled = false;
-            } else {
-                rechargeBtn.disabled = true;
-            }
-        }
-
-        rechargeBtn.addEventListener('click', function() {
-            if (selectedAmount >= 50) {
-                alert(`เติมเงิน ${selectedAmount} บาท สำเร็จ!`);
-            }
-        });
-    </script>
-</body>
-</html>
+<ng-template #emptyHistory>
+  <p class="empty">No transactions yet.</p>
+</ng-template>

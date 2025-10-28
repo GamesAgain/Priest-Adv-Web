@@ -1,110 +1,129 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameStore</title>
-    <!-- <link rel="stylesheet" href="style.css"> -->
-</head>
-<body>
-    <app-header></app-header>
-    <div class="container">
+<app-header></app-header>
 
-        <div class="banner">
-            <h1>Public Relations</h1>
-            <div class="promotion">Promotion Game Sale 50% 🎉</div>
-            <div class="progress-bars">
-                <div class="progress-bar"></div>
-                <div class="progress-bar"></div>
-                <div class="progress-bar"></div>
-                <div class="progress-bar"></div>
-            </div>
-        </div>
-
-        <div class="categories">
-            <button class="category-chip active">All</button>
-            <button class="category-chip">RPG</button>
-            <button class="category-chip">Strategy</button>
-            <button class="category-chip">Simulation</button>
-            <button class="category-chip">Sports</button>
-            <button class="category-chip">Others</button>
-            <div class="search-box">
-                <input type="text" placeholder="search games...">
-                <span>🔍</span>
-            </div>
-        </div>
-
-        <div class="section-title">Best Seller Game</div>
-        <div class="game-list">
-            <div class="game-item">
-                <div class="rank">#1</div>
-                <div class="game-cover"></div>
-                <div class="game-info">
-                    <div class="game-title">Monster Hunter Wilds</div>
-                    <div class="game-price">- 2,590.00 ฿</div>
-                    <div class="game-meta">Category : Action , RPG<br>วางจำหน่าย : 28/2/2025</div>
-                </div>
-                <div class="game-actions">
-                    <button class="btn btn-detail">Detail</button>
-                    <button class="btn btn-buy">Buy</button>
-                </div>
-            </div>
-
-            <div class="game-item">
-                <div class="rank">#2</div>
-                <div class="game-cover"></div>
-                <div class="game-info">
-                    <div class="game-title">Call Of Duty Black OPS 6</div>
-                    <div class="game-price">- 2,441.00 ฿</div>
-                    <div class="game-meta">Category : Action<br>วางจำหน่าย : 25/10/2024</div>
-                </div>
-                <div class="game-actions">
-                    <button class="btn btn-detail">Detail</button>
-                    <button class="btn btn-buy">Buy</button>
-                </div>
-            </div>
-
-            <div class="game-item">
-                <div class="rank">#3</div>
-                <div class="game-cover"></div>
-                <div class="game-info">
-                    <div class="game-title">EA Sports FC 25</div>
-                    <div class="game-price">- 1,120.00 ฿</div>
-                    <div class="game-meta">Category : Sports<br>วางจำหน่าย : 27/9/2024</div>
-                </div>
-                <div class="game-actions">
-                    <button class="btn btn-detail">Detail</button>
-                    <button class="btn btn-buy">Buy</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-title">New Release</div>
-        <div class="new-releases">
-            <div class="new-game-card">
-                <div class="new-game-cover"></div>
-                <div class="new-game-title">Game Maa</div>
-                <div class="new-game-price">Price : 999.00 ฿</div>
-                <div class="new-game-meta">Category : Moba<br>Released : 1/9/2025</div>
-                <button class="btn-more">See More Detail</button>
-            </div>
-
-            <div class="new-game-card">
-                <div class="new-game-cover"></div>
-                <div class="new-game-title">Dying Light : The Beast</div>
-                <div class="new-game-price">Price : 2,099.00 ฿</div>
-                <div class="new-game-meta">Category : Action , Survival<br>Released : 18/9/2025</div>
-                <button class="btn-more">See More Detail</button>
-            </div>
-
-            <div class="new-game-card">
-                <div class="new-game-cover"></div>
-                <div class="new-game-title">Little Nightmares III</div>
-                <div class="new-game-price">Price : 1,189.47 ฿</div>
-                <div class="new-game-meta">Category : Horror<br>Released : 10/10/2025</div>
-                <button class="btn-more">See More Detail</button>
-            </div>
-        </div>
+<section class="store-page">
+  <header class="hero">
+    <div>
+      <h1>Discover new worlds</h1>
+      <p>Browse curated games across every genre and complete your collection.</p>
     </div>
-</body>
-</html>
+    <button type="button" (click)="clearFilters()">Reset filters</button>
+  </header>
+
+  <section class="filters">
+    <input
+      type="search"
+      placeholder="Search games by name"
+      [ngModel]="searchTerm()"
+      (ngModelChange)="searchTerm.set($event)"
+    />
+
+    <div class="categories" *ngIf="categories$ | async as categories">
+      <button
+        type="button"
+        [class.active]="selectedCategory() === 'all'"
+        (click)="selectCategory('all')"
+      >
+        All
+      </button>
+      <button
+        type="button"
+        *ngFor="let category of categories"
+        [class.active]="selectedCategory() === category"
+        (click)="selectCategory(category)"
+      >
+        {{ category }}
+      </button>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="games">
+      <h2>Store catalog</h2>
+      <p class="message" *ngIf="message()">{{ message() }}</p>
+      <p class="error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+
+      <div class="game-grid" *ngIf="games$ | async as games">
+        <article class="game-card" *ngFor="let game of games">
+          <div class="cover" [style.background-image]="'url(' + (game.coverImage || 'https://picsum.photos/seed/' + game.id + '/600/400') + ')'">
+            <span class="category">{{ game.category }}</span>
+            <span class="badge" *ngIf="game.isOwned">Owned</span>
+          </div>
+          <div class="details">
+            <h3>{{ game.title }}</h3>
+            <p>{{ game.description }}</p>
+            <div class="meta">
+              <span>{{ game.price | number:'1.2-2' }} ฿</span>
+              <small>Released {{ game.releaseDate | date:'mediumDate' }}</small>
+            </div>
+            <button type="button" [disabled]="game.isOwned" (click)="addToCart(game)">
+              {{ game.isOwned ? 'Owned' : 'Add to cart' }}
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <section class="best-sellers" *ngIf="bestSellers$ | async as bestSellers">
+        <h2>Top sellers</h2>
+        <ol>
+          <li *ngFor="let game of bestSellers; let i = index">
+            <span class="rank">#{{ i + 1 }}</span>
+            <div>
+              <h3>{{ game.title }}</h3>
+              <p>{{ game.totalSales }} sales • {{ game.price | number:'1.0-0' }} ฿</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="cart" *ngIf="cartState$ | async as cart">
+        <h2>Your cart</h2>
+        <p *ngIf="!cart.items.length" class="empty">No games added yet.</p>
+
+        <ul *ngIf="cart.items.length">
+          <li *ngFor="let item of cart.items">
+            <div>
+              <strong>{{ item.game.title }}</strong>
+              <small>{{ item.game.price | number:'1.2-2' }} ฿</small>
+            </div>
+            <button type="button" (click)="removeFromCart(item.game.id)">Remove</button>
+          </li>
+        </ul>
+
+        <div class="discount">
+          <input
+            type="text"
+            placeholder="Discount code"
+            [value]="discountInput()"
+            (input)="discountInput.set($any($event.target).value)"
+          />
+          <div class="actions">
+            <button type="button" (click)="applyDiscount()">Apply</button>
+            <button type="button" (click)="clearDiscount()" [disabled]="!cart.discountCode">Clear</button>
+          </div>
+          <p class="info" *ngIf="cart.discountCode">Using {{ cart.discountCode }}</p>
+        </div>
+
+        <dl class="summary">
+          <div>
+            <dt>Subtotal</dt>
+            <dd>{{ cart.summary.totalBeforeDiscount | number:'1.2-2' }} ฿</dd>
+          </div>
+          <div>
+            <dt>Discount</dt>
+            <dd>-{{ cart.summary.discountAmount | number:'1.2-2' }} ฿</dd>
+          </div>
+          <div class="total">
+            <dt>Total</dt>
+            <dd>{{ cart.summary.totalAfterDiscount | number:'1.2-2' }} ฿</dd>
+          </div>
+        </dl>
+
+        <button type="button" class="checkout" (click)="checkout(cart)" [disabled]="!cart.items.length">
+          Checkout
+        </button>
+      </section>
+    </aside>
+  </section>
+</section>
